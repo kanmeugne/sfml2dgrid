@@ -19,8 +19,8 @@ int main()
 	settings.antialiasingLevel = 10;
 	sf::RenderWindow window(
 		sf::VideoMode(
-			size_t(App::DEFAULT_WIDTH*App::DEFAULT_RESX),
-			size_t(App::DEFAULT_HEIGHT*App::DEFAULT_RESY)
+			(App::DEFAULT_WIDTH*App::DEFAULT_RESX),
+			(App::DEFAULT_HEIGHT*App::DEFAULT_RESY)
 		),
 		"SFML 2D Grid",
 		sf::Style::Titlebar | sf::Style::Close, 
@@ -46,6 +46,7 @@ int main()
 	//-- viewer
 	GridViewer gviewer;
 	app.setViewer(&gviewer);
+	gviewer.initialize();
     gviewer.iActivate();
 
     //-- launch application

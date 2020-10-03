@@ -2,49 +2,43 @@
 
 void Grid::iApplyOnCells(ICellFunctor& cf) const
 {
-	for (size_t i = 0; i<_cells.size(); i++)
+	for (unsigned int i = 0; i<_cells.size(); i++)
 		cf(i);
 }
 
-void Grid::iApplyOnSegments(ISegmentFunctor& lf) const
-{
-	for (auto it = _lines.begin(); it != _lines.end(); it++)
-		lf(*it);
-}
-
-size_t Grid::iGetSizeX() const
+unsigned int Grid::iGetSizeX() const
 {
 	return _sizex;
 }
 
-size_t Grid::iGetSizeY() const
+unsigned int Grid::iGetSizeY() const
 {
 	return _sizey;
 }
 
-size_t Grid::iGetNumberOfCells() const
+unsigned int Grid::iGetNumberOfCells() const
 {
 	return _sizex * _sizey;
 }
 
-double Grid::iGetResolutionX() const
+unsigned int Grid::iGetResolutionX() const
 {
 	return _resolutionx;
 }
 
-double Grid::iGetResolutionY() const
+unsigned int Grid::iGetResolutionY() const
 {
 	return _resolutiony;
 }
 
-bool Grid::iGetCellPosition(CELL cell, double &x, double &y) const
+bool Grid::iGetCellPosition(CELL cell, unsigned int &x, unsigned int &y) const
 {
 	y = (0.5 + (cell / _sizex))*_resolutiony;
 	x = (0.5 + (cell % _sizex))*_resolutionx;
 	return (cell < iGetNumberOfCells());
 }
 
-bool Grid::iGetCellNumber(size_t i, size_t j, CELL& cell) const
+bool Grid::iGetCellNumber(unsigned int i, unsigned int j, CELL& cell) const
 {
 	cell = j + _sizex * i;
 	return (cell < iGetNumberOfCells()) && (i < iGetSizeY()) && (j < iGetSizeX());
@@ -58,14 +52,14 @@ bool Grid::iIsObstacle(const CELL cell) const
 	return result;
 }
 
-bool Grid::iGetCellCoordinates(CELL cell, size_t &i, size_t &j) const
+bool Grid::iGetCellCoordinates(CELL cell, unsigned int &i, unsigned int &j) const
 {
 	i = cell / _sizex;
 	j = cell % _sizex;
 	return (i < iGetSizeX()) && (j < iGetSizeY());
 }
 
-bool Grid::iIsWithinCell(const float posx, const float posy, CELL cell) const
+bool Grid::iIsWithinCell(const unsigned int posx, const unsigned int posy, CELL cell) const
 {
 	CELL c;
 	return (iGetContainingCell(posx, posy, c) && (cell==c));
@@ -76,22 +70,6 @@ void Grid::iInitialize()
 	_cells.reserve(iGetNumberOfCells());
 	for (CELL i = 0; i < iGetNumberOfCells(); i++)
 		_cells.push_back(0);
-
-	// build vertical lines
-	for (CELL i = 0; i <= _sizex; i++)
-	{
-		Point init (std::make_pair(_resolutionx*i, 0.));
-		Point end  (std::make_pair(_resolutionx*i, _resolutiony*_sizey));
-		_lines.push_back(std::make_pair(init, end));
-	}
-
-	// build horizontal lines
-	for (CELL i = 0; i <= _sizey; i++)
-	{
-		Point init (std::make_pair(0., _resolutiony*i));
-		Point end  (std::make_pair(_resolutionx*_sizex, _resolutiony*i));
-		_lines.push_back(std::make_pair(init, end));
-	}
 }
 
 bool Grid::iAddObstacle(const CELL cell)
@@ -116,30 +94,30 @@ bool Grid::iRemoveObstacle(const CELL cell)
 	return result;
 }
 
-bool Grid::iGetContainingCell(const float x, const float y, CELL& cell) const
+bool Grid::iGetContainingCell(const unsigned int x, const unsigned int y, CELL& cell) const
 {
-	size_t cellx (x / _resolutionx);
-	size_t celly (y / _resolutiony);
+	unsigned int cellx (x / _resolutionx);
+	unsigned int celly (y / _resolutiony);
 	cell = (cellx + celly * _sizex);
 	return (x >= 0) && (y >= 0) && (cellx < _sizex) && (celly < _sizey);
 }
 
-void Grid::setSizeX(size_t sizex)
+void Grid::setSizeX(unsigned int sizex)
 {
 	_sizex = sizex;
 }
 
-void Grid::setSizeY(size_t sizey)
+void Grid::setSizeY(unsigned int sizey)
 {
 	_sizey = sizey;
 }
 
-void Grid::setResolutionX(double resx)
+void Grid::setResolutionX(unsigned int resx)
 {
 	_resolutionx = resx;
 }
 
-void Grid::setResolutionY(double resy)
+void Grid::setResolutionY(unsigned int resy)
 {
 	_resolutiony = resy;
 }

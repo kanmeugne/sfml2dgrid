@@ -10,23 +10,23 @@ public:
 	virtual ~Grid() = default;
 	Grid() = default;
 	//-- Getters
-	virtual size_t iGetSizeX() const;
-	virtual size_t iGetSizeY() const;
-	virtual size_t iGetNumberOfCells() const;
-	virtual double iGetResolutionX() const;
-	virtual double iGetResolutionY() const;
+	virtual unsigned int iGetSizeX() const;
+	virtual unsigned int iGetSizeY() const;
+	virtual unsigned int iGetNumberOfCells() const;
+	virtual unsigned int iGetResolutionX() const;
+	virtual unsigned int iGetResolutionY() const;
 	// Test
-	virtual bool iGetCellPosition(CELL, double&, double&) const;
-	virtual bool iGetCellCoordinates(CELL, size_t&, size_t&) const;
-	virtual bool iGetCellNumber(size_t, size_t, CELL&) const;
+	virtual bool iGetCellPosition(CELL, unsigned int&, unsigned int&) const;
+	virtual bool iGetCellCoordinates(CELL, unsigned int&, unsigned int&) const;
+	virtual bool iGetCellNumber(unsigned int, unsigned int, CELL&) const;
 	virtual bool iGetContainingCell(
-		const float, // posx
-		const float, // posy
+		const unsigned int, // posx
+		const unsigned int, // posy
 		CELL& // output cellid
 	) const;
 	virtual bool iIsWithinCell(
-		const float, // posx
-		const float, // posy
+		const unsigned int, // posx
+		const unsigned int, // posy
 		CELL // cellid
 	) const;
 	virtual void iInitialize() ;
@@ -35,18 +35,16 @@ public:
 	virtual bool iRemoveObstacle(const CELL);
 	//-- functors
 	virtual void iApplyOnCells(ICellFunctor&) const;
-	virtual void iApplyOnSegments(ISegmentFunctor&) const;
 	//-- Setters
-	void setSizeX(size_t);
-	void setSizeY(size_t);
-	void setResolutionX(double);
-	void setResolutionY(double);
+	void setSizeX(unsigned int);
+	void setSizeY(unsigned int);
+	void setResolutionX(unsigned int);
+	void setResolutionY(unsigned int);
 private:
-	size_t _sizex = 10;
-	size_t _sizey = 10;
-	double _resolutionx = 1.;
-	double _resolutiony = 1.;
+	unsigned int _sizex = 10;
+	unsigned int _sizey = 10;
+	unsigned int _resolutionx = 1;
+	unsigned int _resolutiony = 1;
 	std::vector<CELL> _cells;
-	std::vector<Segment> _lines;
 };
 #endif // !GRID_H
