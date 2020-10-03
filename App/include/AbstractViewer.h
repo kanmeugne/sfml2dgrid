@@ -6,7 +6,7 @@ class App;
 // AbstractViewer
 class AbstractViewer
 {
-public:	
+public:
 	// activate the viewer. If activated, it provides the desired view
 	virtual void iActivate();
 
