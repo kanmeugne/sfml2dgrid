@@ -5,7 +5,7 @@
 
 namespace geometry
 {
-	typedef std::pair<unsigned int, unsigned int> Point;
+	typedef std::pair<int, int> Point;
 	typedef std::pair<Point, Point> Segment;
 
 	// Functor definition to apply on segment

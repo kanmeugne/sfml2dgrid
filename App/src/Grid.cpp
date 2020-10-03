@@ -2,43 +2,43 @@
 
 void Grid::iApplyOnCells(ICellFunctor& cf) const
 {
-	for (unsigned int i = 0; i<_cells.size(); i++)
+	for (int i = 0; i<_cells.size(); i++)
 		cf(i);
 }
 
-unsigned int Grid::iGetSizeX() const
+int Grid::iGetSizeX() const
 {
 	return _sizex;
 }
 
-unsigned int Grid::iGetSizeY() const
+int Grid::iGetSizeY() const
 {
 	return _sizey;
 }
 
-unsigned int Grid::iGetNumberOfCells() const
+int Grid::iGetNumberOfCells() const
 {
 	return _sizex * _sizey;
 }
 
-unsigned int Grid::iGetResolutionX() const
+int Grid::iGetResolutionX() const
 {
 	return _resolutionx;
 }
 
-unsigned int Grid::iGetResolutionY() const
+int Grid::iGetResolutionY() const
 {
 	return _resolutiony;
 }
 
-bool Grid::iGetCellPosition(CELL cell, unsigned int &x, unsigned int &y) const
+bool Grid::iGetCellPosition(CELL cell, int &x, int &y) const
 {
 	y = (0.5 + (cell / _sizex))*_resolutiony;
 	x = (0.5 + (cell % _sizex))*_resolutionx;
 	return (cell < iGetNumberOfCells());
 }
 
-bool Grid::iGetCellNumber(unsigned int i, unsigned int j, CELL& cell) const
+bool Grid::iGetCellNumber(int i, int j, CELL& cell) const
 {
 	cell = j + _sizex * i;
 	return (cell < iGetNumberOfCells()) && (i < iGetSizeY()) && (j < iGetSizeX());
@@ -52,14 +52,14 @@ bool Grid::iIsObstacle(const CELL cell) const
 	return result;
 }
 
-bool Grid::iGetCellCoordinates(CELL cell, unsigned int &i, unsigned int &j) const
+bool Grid::iGetCellCoordinates(CELL cell, int &i, int &j) const
 {
 	i = cell / _sizex;
 	j = cell % _sizex;
 	return (i < iGetSizeX()) && (j < iGetSizeY());
 }
 
-bool Grid::iIsWithinCell(const unsigned int posx, const unsigned int posy, CELL cell) const
+bool Grid::iIsWithinCell(const int posx, const int posy, CELL cell) const
 {
 	CELL c;
 	return (iGetContainingCell(posx, posy, c) && (cell==c));
@@ -94,30 +94,30 @@ bool Grid::iRemoveObstacle(const CELL cell)
 	return result;
 }
 
-bool Grid::iGetContainingCell(const unsigned int x, const unsigned int y, CELL& cell) const
+bool Grid::iGetContainingCell(const int x, const int y, CELL& cell) const
 {
-	unsigned int cellx (x / _resolutionx);
-	unsigned int celly (y / _resolutiony);
+	int cellx (x / _resolutionx);
+	int celly (y / _resolutiony);
 	cell = (cellx + celly * _sizex);
 	return (x >= 0) && (y >= 0) && (cellx < _sizex) && (celly < _sizey);
 }
 
-void Grid::setSizeX(unsigned int sizex)
+void Grid::setSizeX(int sizex)
 {
 	_sizex = sizex;
 }
 
-void Grid::setSizeY(unsigned int sizey)
+void Grid::setSizeY(int sizey)
 {
 	_sizey = sizey;
 }
 
-void Grid::setResolutionX(unsigned int resx)
+void Grid::setResolutionX(int resx)
 {
 	_resolutionx = resx;
 }
 
-void Grid::setResolutionY(unsigned int resy)
+void Grid::setResolutionY(int resy)
 {
 	_resolutiony = resy;
 }

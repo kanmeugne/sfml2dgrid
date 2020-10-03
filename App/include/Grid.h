@@ -10,23 +10,23 @@ public:
 	virtual ~Grid() = default;
 	Grid() = default;
 	//-- Getters
-	virtual unsigned int iGetSizeX() const;
-	virtual unsigned int iGetSizeY() const;
-	virtual unsigned int iGetNumberOfCells() const;
-	virtual unsigned int iGetResolutionX() const;
-	virtual unsigned int iGetResolutionY() const;
+	virtual int iGetSizeX() const;
+	virtual int iGetSizeY() const;
+	virtual int iGetNumberOfCells() const;
+	virtual int iGetResolutionX() const;
+	virtual int iGetResolutionY() const;
 	// Test
-	virtual bool iGetCellPosition(CELL, unsigned int&, unsigned int&) const;
-	virtual bool iGetCellCoordinates(CELL, unsigned int&, unsigned int&) const;
-	virtual bool iGetCellNumber(unsigned int, unsigned int, CELL&) const;
+	virtual bool iGetCellPosition(CELL, int&, int&) const;
+	virtual bool iGetCellCoordinates(CELL, int&, int&) const;
+	virtual bool iGetCellNumber(int, int, CELL&) const;
 	virtual bool iGetContainingCell(
-		const unsigned int, // posx
-		const unsigned int, // posy
+		const int, // posx
+		const int, // posy
 		CELL& // output cellid
 	) const;
 	virtual bool iIsWithinCell(
-		const unsigned int, // posx
-		const unsigned int, // posy
+		const int, // posx
+		const int, // posy
 		CELL // cellid
 	) const;
 	virtual void iInitialize() ;
@@ -36,15 +36,15 @@ public:
 	//-- functors
 	virtual void iApplyOnCells(ICellFunctor&) const;
 	//-- Setters
-	void setSizeX(unsigned int);
-	void setSizeY(unsigned int);
-	void setResolutionX(unsigned int);
-	void setResolutionY(unsigned int);
+	void setSizeX(int);
+	void setSizeY(int);
+	void setResolutionX(int);
+	void setResolutionY(int);
 private:
-	unsigned int _sizex = 10;
-	unsigned int _sizey = 10;
-	unsigned int _resolutionx = 1;
-	unsigned int _resolutiony = 1;
+	int _sizex = 10;
+	int _sizey = 10;
+	int _resolutionx = 1;
+	int _resolutiony = 1;
 	std::vector<CELL> _cells;
 };
 #endif // !GRID_H

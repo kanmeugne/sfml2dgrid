@@ -32,13 +32,13 @@ LineDrawer ld;
 
 void GridViewer::initialize()
 {
-	unsigned int sizex = _app->getGrid()->iGetSizeX();
-	unsigned int sizey = _app->getGrid()->iGetSizeY();
-	unsigned int resx = _app->getGrid()->iGetResolutionX();
-	unsigned int resy = _app->getGrid()->iGetResolutionY();
+	int sizex = _app->getGrid()->iGetSizeX();
+	int sizey = _app->getGrid()->iGetSizeY();
+	int resx = _app->getGrid()->iGetResolutionX();
+	int resy = _app->getGrid()->iGetResolutionY();
 
 	// build vertical lines
-	for (unsigned int i = 0; i <= sizex; i++)
+	for (int i = 0; i <= sizex; i++)
 	{
 		geometry::Point init (std::make_pair(resx*i, 0));
 		geometry::Point end  (std::make_pair(resx*i, resy*sizey));
@@ -46,7 +46,7 @@ void GridViewer::initialize()
 	}
 
 	// build horizontal lines
-	for (unsigned int j = 0; j <= sizey; j++)
+	for (int j = 0; j <= sizey; j++)
 	{
 		geometry::Point init (std::make_pair(0, resy*j));
 		geometry::Point end  (std::make_pair(resx*sizex, resy*j));

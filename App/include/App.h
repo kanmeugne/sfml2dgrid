@@ -24,16 +24,16 @@ private:
 public:
 	// theorical width of the environment
 	// will match the grid width in terms of number of cells. 
-	static const unsigned int DEFAULT_WIDTH;
+	static const int DEFAULT_WIDTH;
 
 	// theorical height of the environment. 
-	static const unsigned int DEFAULT_HEIGHT;
+	static const int DEFAULT_HEIGHT;
 
 	// x-resolution of the grid i.e. the x-size of a cell
-	static const unsigned int DEFAULT_RESX;
+	static const int DEFAULT_RESX;
 
 	// y-resolution of the grid i.e. the y-size of a cell
-	static const unsigned int DEFAULT_RESY;
+	static const int DEFAULT_RESY;
 
 	App() = default;
 	virtual ~App();
