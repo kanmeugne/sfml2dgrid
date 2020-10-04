@@ -1,8 +1,6 @@
 #ifndef IGRID_H
 #define IGRID_H
 
-#include <tuple>
-
 class IGrid
 {
 public:
@@ -55,6 +53,8 @@ public:
 	virtual void iInitialize() = 0;
 	// set a cell as obstacle
 	virtual bool iAddObstacle(const CELL /*cell_id*/) = 0;
+	// remove obstacle on a cell
+	virtual bool iRemoveObstacle(const CELL /*cell_id*/) = 0;
 	// return the obstacle status : true if obstacle, false otherwise
 	virtual bool iIsObstacle(const CELL /*cell_id*/) const = 0;
 };
