@@ -1,5 +1,6 @@
 #include "App.h"
 #include "GridViewer.h"
+#include "ObstacleViewer.h"
 #include "Grid.h"
 #include <thread>
 #include <SFML/Graphics.hpp>
@@ -44,10 +45,17 @@ int main()
     app.setGrid(&g);
 
 	//-- viewer
-	GridViewer gviewer;
-	app.setViewer(&gviewer);
-	gviewer.initialize();
-    gviewer.iActivate();
+
+	// grid lines
+	// GridViewer gviewer;
+	// app.setViewer(&gviewer);
+	// gviewer.initialize();
+    // gviewer.iActivate();
+
+	// grid obstacles
+	ObstacleViewer oviewer;
+	app.setViewer(&oviewer);
+    oviewer.iActivate();
 
     //-- launch application
 	std::thread rendering_thread(&App::display, &app);
