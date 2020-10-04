@@ -55,5 +55,12 @@ public:
 
 	// global display method. display all objects of the app
 	void display();
+
+	// add obstacle control
+	bool addObstacle(int, int);
+
+	// remove obstacle control
+	bool removeObstacle (int, int);
+
 };
 #endif // !APP_H

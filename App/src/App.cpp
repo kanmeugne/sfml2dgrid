@@ -48,6 +48,7 @@ void App::display()
 		_window->setActive(true);
 		while (_window->isOpen())
 		{
+    		_window->clear(sf::Color::White);
 			_viewer->iDisplay();
 			_window->display();
 		}
@@ -70,13 +71,15 @@ void App::run()
 				{
 					int posx = event.mouseButton.x;
 					int posy = event.mouseButton.y;
-					printf("right mouse clicked.\nx=%d, y=%d\n", posx, posy);
+					printf("Sending request to add obstacle at position x=%d, y=%d ...\n", posx, posy);
+					printf("success = %s!\n", addObstacle(posx, posy)?"OK":"NOK");
 				}
 				if (event.mouseButton.button == sf::Mouse::Left)
 				{
 					int posx = event.mouseButton.x;
 					int posy = event.mouseButton.y;
-					printf("left mouse clicked.\nx=%d, y=%d\n", posx, posy);
+					printf("Sending request to remove obstacle at position x=%d, y=%d...\n", posx, posy);
+					printf("sucess = %s!\n", removeObstacle(posx, posy)?"OK":"NOK");
 				}
 			}
 			if (event.type == sf::Event::MouseMoved)
@@ -84,4 +87,27 @@ void App::run()
 			}
 		}
 	}
+}
+
+bool App::addObstacle(int posx, int posy)
+{
+	IGrid::CELL cell;
+	int resx = getGrid()->iGetResolutionX();
+	int resy = getGrid()->iGetResolutionY();
+	bool thereisacell = getGrid()->iGetCellNumber(posy/resy, posx/resx, cell);
+	if (thereisacell)
+		printf("cell = %d!\n", cell);
+	
+	return thereisacell && (getGrid()->iAddObstacle(cell));
+}
+
+bool App::removeObstacle (int posx, int posy)
+{
+	IGrid::CELL cell;
+	int resx = getGrid()->iGetResolutionX();
+	int resy = getGrid()->iGetResolutionY();
+	bool thereisacell = getGrid()->iGetCellNumber(posy/resy, posx/resx, cell);
+	if (thereisacell)
+		printf("cell = %d!\n", cell);
+	return thereisacell && (getGrid()->iRemoveObstacle(cell));
 }
