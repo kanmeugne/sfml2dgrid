@@ -41,7 +41,7 @@ bool Grid::iGetCellPosition(CELL cell, int &x, int &y) const
 bool Grid::iGetCellNumber(int i, int j, CELL& cell) const
 {
 	cell = j + _sizex * i;
-	return (cell < iGetNumberOfCells()) && (i < iGetSizeY()) && (j < iGetSizeX());
+	return (cell < iGetNumberOfCells()) && (i < _sizey) && (j < _sizex);
 }
 
 bool Grid::iIsObstacle(const CELL cell) const
@@ -56,7 +56,7 @@ bool Grid::iGetCellCoordinates(CELL cell, int &i, int &j) const
 {
 	i = cell / _sizex;
 	j = cell % _sizex;
-	return (i < iGetSizeX()) && (j < iGetSizeY());
+	return (i < _sizex) && (j < _sizey);
 }
 
 bool Grid::iIsWithinCell(int posx, int posy, CELL cell) const
@@ -86,7 +86,7 @@ bool Grid::iAddObstacle(const CELL cell)
 bool Grid::iRemoveObstacle(const CELL cell)
 {
 	bool result = false;
-	if (cell < iGetNumberOfCells() && _cells[cell] == 0)
+	if (cell < iGetNumberOfCells() && _cells[cell] == 1)
 	{
 		_cells[cell] = 0;
 		result = true;
