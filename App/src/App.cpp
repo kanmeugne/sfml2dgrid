@@ -71,15 +71,15 @@ void App::run()
 				{
 					int posx = event.mouseButton.x;
 					int posy = event.mouseButton.y;
-					printf("Sending request to add obstacle at position x=%d, y=%d ...\n", posx, posy);
-					printf("success = %s!\n", addObstacle(posx, posy)?"OK":"NOK");
+					printf("Adding obstacle at position [x=%d, y=%d] ", posx, posy);
+					printf(" ... %s!\n", addObstacle(posx, posy)?"SUCCESSFUL":"FAILED");
 				}
 				if (event.mouseButton.button == sf::Mouse::Left)
 				{
 					int posx = event.mouseButton.x;
 					int posy = event.mouseButton.y;
-					printf("Sending request to remove obstacle at position x=%d, y=%d...\n", posx, posy);
-					printf("sucess = %s!\n", removeObstacle(posx, posy)?"OK":"NOK");
+					printf("Removing obstacle at position [x=%d, y=%d] ", posx, posy);
+					printf(" ... %s!\n", removeObstacle(posx, posy)?"SUCCESSFUL":"FAILED");
 				}
 			}
 			if (event.type == sf::Event::MouseMoved)
@@ -96,7 +96,7 @@ bool App::addObstacle(int posx, int posy)
 	int resy = getGrid()->iGetResolutionY();
 	bool thereisacell = getGrid()->iGetCellNumber(posy/resy, posx/resx, cell);
 	if (thereisacell)
-		printf("cell = %d!\n", cell);
+		printf("(CellNo: %d)", cell);
 	
 	return thereisacell && (getGrid()->iAddObstacle(cell));
 }
@@ -108,6 +108,6 @@ bool App::removeObstacle (int posx, int posy)
 	int resy = getGrid()->iGetResolutionY();
 	bool thereisacell = getGrid()->iGetCellNumber(posy/resy, posx/resx, cell);
 	if (thereisacell)
-		printf("cell = %d!\n", cell);
+		printf("(CellNo: %d)", cell);
 	return thereisacell && (getGrid()->iRemoveObstacle(cell));
 }
