@@ -59,7 +59,7 @@ bool Grid::iGetCellCoordinates(CELL cell, int &i, int &j) const
 	return (i < iGetSizeX()) && (j < iGetSizeY());
 }
 
-bool Grid::iIsWithinCell(const int posx, const int posy, CELL cell) const
+bool Grid::iIsWithinCell(int posx, int posy, CELL cell) const
 {
 	CELL c;
 	return (iGetContainingCell(posx, posy, c) && (cell==c));
@@ -94,7 +94,7 @@ bool Grid::iRemoveObstacle(const CELL cell)
 	return result;
 }
 
-bool Grid::iGetContainingCell(const int x, const int y, CELL& cell) const
+bool Grid::iGetContainingCell(int x, int y, CELL& cell) const
 {
 	int cellx (x / _resolutionx);
 	int celly (y / _resolutiony);

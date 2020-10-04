@@ -42,13 +42,13 @@ public:
 		CELL&
 	) const = 0;
 	virtual bool iGetContainingCell(
-		const int, // posx
-		const int, // posy
+		int, // posx
+		int, // posy
 		CELL& // cell_id
 	) const = 0;
 	virtual bool iIsWithinCell(
-		const int, // posx
-		const int, // posy
+		int, // posx
+		int, // posy
 		CELL // cell_id
 	) const = 0;
 	// initialize : the vector of cells, obstacle mask, etc.

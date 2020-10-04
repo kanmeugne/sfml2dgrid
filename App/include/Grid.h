@@ -20,13 +20,13 @@ public:
 	virtual bool iGetCellCoordinates(CELL, int&, int&) const;
 	virtual bool iGetCellNumber(int, int, CELL&) const;
 	virtual bool iGetContainingCell(
-		const int, // posx
-		const int, // posy
+		int, // posx
+		int, // posy
 		CELL& // output cellid
 	) const;
 	virtual bool iIsWithinCell(
-		const int, // posx
-		const int, // posy
+		int, // posx
+		int, // posy
 		CELL // cellid
 	) const;
 	virtual void iInitialize() ;
