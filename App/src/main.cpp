@@ -47,15 +47,22 @@ int main()
 	//-- viewer
 
 	// grid lines
-	// GridViewer gviewer;
-	// app.setViewer(&gviewer);
-	// gviewer.initialize();
-    // gviewer.iActivate();
+	GridViewer gviewer;
+    gviewer.iActivate();
 
 	// grid obstacles
 	ObstacleViewer oviewer;
-	app.setViewer(&oviewer);
     oviewer.iActivate();
+
+	// aggregator
+	ViewerMgr mgr;
+	mgr.iAddViewer(&oviewer);
+	mgr.iAddViewer(&gviewer);
+	app.setViewer(&mgr);
+	mgr.iActivate();
+
+	// initialize gviewer (only after having attached it to the App object)
+	gviewer.initialize();
 
     //-- launch application
 	std::thread rendering_thread(&App::display, &app);

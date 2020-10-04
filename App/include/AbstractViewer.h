@@ -1,5 +1,6 @@
 #ifndef ABSTRACTVIEWER_H
 #define ABSTRACTVIEWER_H
+#include <vector>
 
 class App;
 
@@ -31,11 +32,19 @@ protected:
     App* _app;
 };
 
-class AbstractViewerMgr : public AbstractViewer
+// viewer manager, using the composite pattern to 
+// aggregate several viewers into one
+class ViewerMgr : public AbstractViewer
 {
 public:
-	virtual void iAddViewer(AbstractViewer*) = 0;
-	virtual ~AbstractViewerMgr();
+	virtual void iAddViewer(AbstractViewer*);
+	virtual ~ViewerMgr() = default;
+	ViewerMgr() = default;
+	virtual void iSetApp(App*) override;
+protected:
+	virtual void iDraw();
+private:
+	std::vector<AbstractViewer*> _viewers;
 };
 
 #endif // ABSTRACTVIEWER_H

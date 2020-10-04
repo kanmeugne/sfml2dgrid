@@ -1,4 +1,5 @@
 #include "AbstractViewer.h"
+#include <algorithm>
 
 void AbstractViewer::iSetApp(App *app)
 {
@@ -24,4 +25,23 @@ void AbstractViewer::iDisplay()
 {
     if (iIsActive())
         iDraw();
+}
+
+void ViewerMgr::iAddViewer(AbstractViewer* v)
+{
+	auto it = std::find(_viewers.begin(), _viewers.end(), v);
+	if (it == _viewers.end())
+		_viewers.push_back(v);
+}
+
+void ViewerMgr::iDraw()
+{
+	for (auto it = _viewers.begin(); it!=_viewers.end(); it++)
+		(*it)->iDisplay();
+}
+
+void ViewerMgr::iSetApp(App *app)
+{
+	for (auto it = _viewers.begin(); it!=_viewers.end(); it++)
+		(*it)->iSetApp(app);
 }
