@@ -1,11 +1,5 @@
 #include "Grid.h"
 
-void Grid::iApplyOnCells(ICellFunctor& cf) const
-{
-	for (int i = 0; i<_cells.size(); i++)
-		cf(i);
-}
-
 int Grid::iGetSizeX() const
 {
 	return _sizex;
@@ -44,14 +38,6 @@ bool Grid::iGetCellNumber(int i, int j, CELL& cell) const
 	return (cell < iGetNumberOfCells()) && (i < iGetSizeY()) && (j < iGetSizeX());
 }
 
-bool Grid::iIsObstacle(const CELL cell) const
-{
-	bool result = false;
-	if ((cell < iGetNumberOfCells()) && (_cells[cell]==1))
-		result = true;
-	return result;
-}
-
 bool Grid::iGetCellCoordinates(CELL cell, int &i, int &j) const
 {
 	i = cell / _sizex;
@@ -70,28 +56,6 @@ void Grid::iInitialize()
 	_cells.reserve(iGetNumberOfCells());
 	for (CELL i = 0; i < iGetNumberOfCells(); i++)
 		_cells.push_back(0);
-}
-
-bool Grid::iAddObstacle(const CELL cell)
-{
-	bool result = false;
-	if (cell < iGetNumberOfCells() && _cells[cell] == 0)
-	{
-		_cells[cell] = 1;
-		result = true;
-	}
-	return result;
-}
-
-bool Grid::iRemoveObstacle(const CELL cell)
-{
-	bool result = false;
-	if (cell < iGetNumberOfCells() && _cells[cell] == 0)
-	{
-		_cells[cell] = 0;
-		result = true;
-	}
-	return result;
 }
 
 bool Grid::iGetContainingCell(int x, int y, CELL& cell) const

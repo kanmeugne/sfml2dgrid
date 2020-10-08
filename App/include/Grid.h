@@ -30,11 +30,6 @@ public:
 		CELL // cellid
 	) const;
 	virtual void iInitialize() ;
-	virtual bool iIsObstacle(const CELL) const;
-	virtual bool iAddObstacle(const CELL);
-	virtual bool iRemoveObstacle(const CELL);
-	//-- functors
-	virtual void iApplyOnCells(ICellFunctor&) const;
 	//-- Setters
 	void setSizeX(int);
 	void setSizeY(int);

@@ -31,11 +31,4 @@ protected:
     App* _app;
 };
 
-class AbstractViewerMgr : public AbstractViewer
-{
-public:
-	virtual void iAddViewer(AbstractViewer*) = 0;
-	virtual ~AbstractViewerMgr();
-};
-
 #endif // ABSTRACTVIEWER_H
