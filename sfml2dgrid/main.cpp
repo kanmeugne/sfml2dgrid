@@ -1,6 +1,7 @@
 #include "App.h"
 #include "GridViewer.h"
 #include "ObstacleViewer.h"
+#include "PheromonViewer.h"
 #include "Grid.h"
 #include <thread>
 #include <SFML/Graphics.hpp>
@@ -54,9 +55,14 @@ int main()
 	viewers::ObstacleViewer oviewer;
     oviewer.iActivate();
 
+	// pheromons 
+	PheromonViewer pviewer;
+    pviewer.iActivate();
+
 	// aggregator
 	viewers::ViewerMgr mgr;
 	mgr.iAddViewer(&oviewer);
+	mgr.iAddViewer(&pviewer);
 	mgr.iAddViewer(&gviewer);
 	app.setViewer(&mgr);
 	mgr.iActivate();
@@ -66,8 +72,10 @@ int main()
 
     //-- launch application
 	std::thread rendering_thread(&App::display, &app);
+	std::thread evaporation_thread(&App::evaporate, &app);
 	app.run();
 	rendering_thread.join();
+	evaporation_thread.join();
 
     return 0;
 }
