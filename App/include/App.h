@@ -56,11 +56,17 @@ public:
 	// global display method. display all objects of the app
 	void display();
 
+	// evaporation cycle
+	void evaporate();
+
 	// add obstacle control
 	bool addObstacle(int, int);
 
 	// remove obstacle control
-	bool removeObstacle (int, int);
+	bool removeObstacle(int, int);
+
+	// add Pheromon
+	bool addPheromon(int, int);
 
 };
 #endif // !APP_H
