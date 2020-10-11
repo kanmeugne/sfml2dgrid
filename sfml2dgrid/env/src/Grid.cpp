@@ -1,4 +1,5 @@
 #include "Grid.h"
+#include "dynamics.h"
 
 using namespace env;
 
@@ -135,3 +136,30 @@ bool Grid::iIsObstacle(const CELL& cell) const
 {
 	return cell._mask;
 }
+
+void Grid::iUpdatePheromon(const int& elapsed)
+{
+    float coef ((dynamics::RHO * elapsed) / 1000.);
+    int cells = iGetNumberOfCells();
+    for (auto it = _cells.begin(); it != _cells.end(); ++it)
+    {
+        float v (it->_tau * (1 - coef));
+        if (v < dynamics::PMIN)
+			_it->_tau = 0.;
+		else
+			it->_tau = v;
+    }
+}
+
+bool Grid::iAddPheromon(const CELL& cell, const float value)
+{
+	bool result = false;
+	if (false == cell._mask)
+	{
+		const float nvalue (value + cell._tau);
+        _cells[cell._id] = nvalue > dynamics::PMAX ? dynamics::PMAX : nvalue;
+		result = true;
+	}
+	return result;
+}
+

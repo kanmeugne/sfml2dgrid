@@ -1,8 +1,11 @@
 #include "PheromonViewer.h"
 #include "App.h"
+#include "IGrid.h"
 #include <SFML/Graphics.hpp>
 
-class PDrawer : public IGrid::ICellFunctor
+using namespace viewers;
+
+class PDrawer : public env::ICellFunctor
 {
 private:
 	const sf::Color& _color;
@@ -14,9 +17,9 @@ public:
 		_app = app;
 	}
 	virtual ~PDrawer() {};
-	virtual void operator()(const IGrid::CELL cell)
+	virtual void operator()(const env::CELL& cell)
 	{
-        if (false != _app->getGrid()->iIsObstacle(cell))
+        if (true == cell._mask)
 
         {
             // get cell position
@@ -41,7 +44,7 @@ public:
 // cell functor for pheromon drawing
 PDrawer phdr;
 
-void PheromonViewer::drawPheromon(IGrid::ICellFunctor& cf)
+void PheromonViewer::drawPheromon(env::ICellFunctor& cf)
 {
 	_app->getGrid()->iApplyOnCells(cf);
 }

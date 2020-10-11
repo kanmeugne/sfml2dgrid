@@ -40,6 +40,9 @@ namespace env
 		virtual bool iAddObstacle(const CELL&);
 		virtual bool iRemoveObstacle(const CELL&);
 		virtual bool iIsObstacle(const CELL& ) const;
+		// Pheromons
+		virtual bool iAddPheromon(const CELL&, const float);
+		virtual void iUpdatePheromon(const int&);
 
 	private:
 		int _sizex = DEFAULT_GRID_SIZEX;

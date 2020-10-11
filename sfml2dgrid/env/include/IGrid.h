@@ -7,6 +7,7 @@ namespace env
 	{
 		int _id; // id of the cell
 		bool _mask;
+		float _tau; // amount of pheromon
 		CELL() = default;
 		CELL(const CELL &) = default;
 	};
@@ -76,6 +77,12 @@ namespace env
 		virtual bool iRemoveObstacle(const CELL &) = 0;
 		// return the obstacle status : true if obstacle, false otherwise
 		virtual bool iIsObstacle(const CELL &) const = 0;
+		// pheromons
+		virtual bool iAddPheromon(
+			const CELL &, // cell no
+			const float // pheromon deposit
+		) = 0;
+		virtual void iUpdatePheromon(const int&) = 0;
 	};
 } // namespace env
 #endif // !IGRID_H
