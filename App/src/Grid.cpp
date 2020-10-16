@@ -1,4 +1,5 @@
 #include "Grid.h"
+#include "dynamics.h"
 
 void Grid::iApplyOnCells(ICellFunctor& cf) const
 {
@@ -46,9 +47,7 @@ bool Grid::iGetCellNumber(int i, int j, CELL& cell) const
 
 bool Grid::iIsObstacle(const CELL cell) const
 {
-	bool result = false;
-	if ((cell < iGetNumberOfCells()) && (_cells[cell]==1))
-		result = true;
+	bool result = ((cell < iGetNumberOfCells()) && _cells[cell]);
 	return result;
 }
 
@@ -69,13 +68,16 @@ void Grid::iInitialize()
 {
 	_cells.reserve(iGetNumberOfCells());
 	for (CELL i = 0; i < iGetNumberOfCells(); i++)
+	{
 		_cells.push_back(0);
+		_pheromons.push_back(0.);
+	}
 }
 
 bool Grid::iAddObstacle(const CELL cell)
 {
 	bool result = false;
-	if (cell < iGetNumberOfCells() && _cells[cell] == 0)
+	if (cell < iGetNumberOfCells() && (! iIsObstacle(cell)))
 	{
 		_cells[cell] = 1;
 		result = true;
@@ -86,9 +88,21 @@ bool Grid::iAddObstacle(const CELL cell)
 bool Grid::iRemoveObstacle(const CELL cell)
 {
 	bool result = false;
-	if (cell < iGetNumberOfCells() && _cells[cell] == 1)
+	if (cell < iGetNumberOfCells() && iIsObstacle(cell))
 	{
 		_cells[cell] = 0;
+		result = true;
+	}
+	return result;
+}
+
+bool Grid::iAddPheromon(const CELL cell, const float value)
+{
+	bool result = false;
+	if (cell < iGetNumberOfCells() && (! iIsObstacle(cell)))
+	{
+		const float nvalue (value + _pheromons[cell]);
+        _pheromons[cell] = nvalue > dynamics::PMAX ? dynamics::PMAX : nvalue;
 		result = true;
 	}
 	return result;
@@ -120,4 +134,29 @@ void Grid::setResolutionX(int resx)
 void Grid::setResolutionY(int resy)
 {
 	_resolutiony = resy;
+}
+
+void Grid::iUpdatePheromon(const int& elapsed)
+{
+    float coef ((dynamics::RHO * elapsed) / 1000.);
+    int cells = iGetNumberOfCells();
+    for (CELL cell = 0; cell < cells; cell++)
+    {
+        float v (_pheromons[cell] * (1 - coef));
+        if (v < dynamics::PMIN)
+			_pheromons[cell] = 0.;
+		else
+			_pheromons[cell] = v;
+    }
+}
+
+bool Grid::iGetPheromon(const CELL cell, float& value) const
+{
+	bool result = false;
+	if (cell < iGetNumberOfCells())
+	{
+		value = _pheromons[cell];
+		result = true;
+	}
+	return result;
 }

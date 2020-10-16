@@ -57,5 +57,12 @@ public:
 	virtual bool iRemoveObstacle(const CELL /*cell_id*/) = 0;
 	// return the obstacle status : true if obstacle, false otherwise
 	virtual bool iIsObstacle(const CELL /*cell_id*/) const = 0;
+	// pheromons
+	virtual bool iAddPheromon(
+		const CELL, // cell no
+		const float // pheromon deposit
+	) = 0;
+	virtual bool iGetPheromon( const CELL /*cell*/, float& /*value*/) const = 0;
+	virtual void iUpdatePheromon(const int&) = 0;
 };
 #endif // !IGRID_H

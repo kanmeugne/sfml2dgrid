@@ -33,6 +33,9 @@ public:
 	virtual bool iIsObstacle(const CELL) const;
 	virtual bool iAddObstacle(const CELL);
 	virtual bool iRemoveObstacle(const CELL);
+	virtual bool iAddPheromon(const CELL, const float);
+	virtual void iUpdatePheromon(const int&);
+	virtual bool iGetPheromon(const CELL /*cell*/, float& /*value*/) const;
 	//-- functors
 	virtual void iApplyOnCells(ICellFunctor&) const;
 	//-- Setters
@@ -45,6 +48,7 @@ private:
 	int _sizey = 10;
 	int _resolutionx = 1;
 	int _resolutiony = 1;
-	std::vector<CELL> _cells;
+	std::vector<bool> _cells;
+	std::vector<float> _pheromons;
 };
 #endif // !GRID_H
