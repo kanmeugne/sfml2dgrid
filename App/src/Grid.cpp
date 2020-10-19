@@ -39,7 +39,7 @@ bool Grid::iGetCellPosition(CELL cell, int &x, int &y) const
 	return (cell < iGetNumberOfCells());
 }
 
-bool Grid::iGetCellNumber(int i, int j, CELL& cell) const
+bool Grid::iGetCellNumberFromPosition(int i, int j, CELL& cell) const
 {
 	cell = j + _sizex * i;
 	return (cell < iGetNumberOfCells()) && (i < _sizey) && (j < _sizex);
@@ -51,7 +51,7 @@ bool Grid::iIsObstacle(const CELL cell) const
 	return result;
 }
 
-bool Grid::iGetCellCoordinates(CELL cell, int &i, int &j) const
+bool Grid::iGetCellLocation(CELL cell, int &i, int &j) const
 {
 	i = cell / _sizex;
 	j = cell % _sizex;

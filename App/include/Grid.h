@@ -17,8 +17,8 @@ public:
 	virtual int iGetResolutionY() const;
 	// Test
 	virtual bool iGetCellPosition(CELL, int&, int&) const;
-	virtual bool iGetCellCoordinates(CELL, int&, int&) const;
-	virtual bool iGetCellNumber(int, int, CELL&) const;
+	virtual bool iGetCellLocation(CELL, int&, int&) const;
+	virtual bool iGetCellNumberFromPosition(int, int, CELL&) const;
 	virtual bool iGetContainingCell(
 		int, // posx
 		int, // posy
