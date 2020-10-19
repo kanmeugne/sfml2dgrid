@@ -29,7 +29,7 @@ public:
 		int&, // posx
 		int& // posy
 	) const = 0;
-	virtual bool iGetCellCoordinates(
+	virtual bool iGetCellLocation(
 		CELL, // cell_id
 		int&, // row_number
 		int& // column_number
