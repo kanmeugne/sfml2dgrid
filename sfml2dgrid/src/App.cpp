@@ -35,7 +35,7 @@ App::~App()
 	_window = nullptr;
 }
 
-void App::setViewer(AbstractViewer *v)
+void App::setViewer(viewers::AbstractViewer *v)
 {
 	_viewer = v;
 	_viewer->iSetApp(this);

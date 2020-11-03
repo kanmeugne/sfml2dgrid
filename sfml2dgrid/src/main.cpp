@@ -44,7 +44,7 @@ int main()
     app.setGrid(&g);
 
 	//-- viewer
-	GridViewer gviewer;
+	viewers::GridViewer gviewer;
 	app.setViewer(&gviewer);
 	gviewer.initialize();
     gviewer.iActivate();

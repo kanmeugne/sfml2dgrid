@@ -3,6 +3,8 @@
 #include "IGrid.h"
 #include <SFML/Graphics.hpp>
 
+using namespace viewers;
+
 class LineDrawer : public geometry::ISegmentFunctor
 {
 private:
