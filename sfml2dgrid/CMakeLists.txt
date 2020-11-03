@@ -2,6 +2,7 @@
 cmake_minimum_required (VERSION 3.8)
 
 set(APPTARGET ${CMAKE_PROJECT_NAME})
+set(APPTARGET ${CMAKE_PROJECT_NAME} PARENT_SCOPE)
 set(LIBTARGET ${CMAKE_PROJECT_NAME}_dev)
 set(LIBTARGET ${CMAKE_PROJECT_NAME}_dev PARENT_SCOPE)
 
@@ -52,13 +53,14 @@ if((NOT WIN32) AND (NOT WIN64))
 	include_directories (/usr/include/freetype2)
 endif()
 
+
 add_executable (${APPTARGET} ${APP_SRC_FILES})
 add_library (${LIBTARGET} ${APP_SRC_FILES})
 
 if(WIN32 OR WIN64)
-	target_link_libraries(${APPTARGET} sfml-window sfml-system sfml-graphics)
-	target_link_libraries(${LIBTARGET} sfml-window sfml-system sfml-graphics)
+	target_link_libraries(${APPTARGET} sfml-graphics)
+	target_link_libraries(${LIBTARGET} sfml-graphics)
 else()
-	target_link_libraries(${APPTARGET} sfml-window sfml-system sfml-graphics pthread X11)
-	target_link_libraries(${LIBTARGET} sfml-window sfml-system sfml-graphics pthread X11)
+	target_link_libraries(${APPTARGET} sfml-graphics pthread X11)
+	target_link_libraries(${LIBTARGET} sfml-graphics pthread X11)
 endif()

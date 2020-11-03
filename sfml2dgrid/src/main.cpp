@@ -35,7 +35,7 @@ int main()
 	app.setWindow(&window);
 
 	//-- grid 2D
-    Grid g;
+    env::Grid g;
 	g.setSizeX(App::DEFAULT_WIDTH);
 	g.setSizeY(App::DEFAULT_HEIGHT);
 	g.setResolutionX(App::DEFAULT_RESX);
