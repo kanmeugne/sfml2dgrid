@@ -5,17 +5,21 @@
 #include "geometry.h"
 #include <vector>
 
-
-class GridViewer : public AbstractViewer
+namespace viewers
 {
-public:
-	GridViewer() = default;
-	virtual void initialize();
-	virtual ~GridViewer() = default;
-protected:
-	virtual void iDraw();
-private:
-	void drawLines(geometry::ISegmentFunctor&) const;
-	std::vector<geometry::Segment> _lines;
-};
+	class GridViewer : public AbstractViewer
+	{
+	public:
+		GridViewer() = default;
+		virtual void initialize();
+		virtual ~GridViewer() = default;
+
+	protected:
+		virtual void iDraw();
+
+	private:
+		void drawLines(geometry::ISegmentFunctor &) const;
+		std::vector<geometry::Segment> _lines;
+	};
+} // namespace viewers
 #endif // !GRIDVIEWER_H

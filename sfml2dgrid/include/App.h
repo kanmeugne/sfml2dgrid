@@ -1,15 +1,22 @@
 
 #ifndef APP_H
 #define APP_H
+
 namespace sf
 {
 	class RenderWindow;
 };
+
 namespace env
 {
 	class IGrid;
 };
-class AbstractViewer;
+
+namespace viewers
+{
+	class AbstractViewer;
+};
+
 class App
 {
 private:
@@ -20,7 +27,7 @@ private:
 	// a pointer to the viewer
 	// this could be a set of viewer actually
 	// if we consider component behavior
-	AbstractViewer *_viewer = nullptr;
+	viewers::AbstractViewer *_viewer = nullptr;
 
 public:
 	// theorical width of the environment
@@ -32,13 +39,10 @@ public:
 	static const int DEFAULT_RESX;
 	// y-resolution of the grid i.e. the y-size of a cell
 	static const int DEFAULT_RESY;
-	// default constructor
-	App() = default;
-	virtual ~App();
 	// attach window to the app
 	void setWindow(sf::RenderWindow *);
 	// attach a specific viewer
-	void setViewer(AbstractViewer *);
+	void setViewer(viewers::AbstractViewer *);
 	// attach a grid (should have been initialized)
 	void setGrid(env::IGrid *);
 	// return the attached grid
@@ -49,5 +53,8 @@ public:
 	void run();
 	// show content (display routines)
 	void display();
+
+	App() = default;
+	virtual ~App();
 };
 #endif // !APP_H
