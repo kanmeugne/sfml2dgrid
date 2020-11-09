@@ -10,6 +10,7 @@ namespace env
 	const int DEFAULT_GRID_SIZEY = 10;
 	const int DEFAULT_RESOLUTIONX = 1;
 	const int DEFAULT_RESOLUTIONY = 1;
+
 	class Grid : public IGrid
 	{
 	public:

@@ -15,10 +15,11 @@ namespace geometry
 	// to apply display instruction on segments
 	class ISegmentFunctor {
 	public:
-		// operator function to apply on each segment (should concretized according to the need)
+		// operator function to apply on each segment 
+		// (should concretized according to the need)
 		virtual void operator()(
 			const Segment& // cell_id
 		) = 0;
 	};
 }
-#endif
+#endif // !GEOMETRY_H
