@@ -1,5 +1,5 @@
 #include <gmock/gmock.h>
-#include "grid.h"
+#include "Grid.h"
 
 using namespace testing;
 
