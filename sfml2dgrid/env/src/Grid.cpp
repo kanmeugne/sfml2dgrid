@@ -71,7 +71,7 @@ void Grid::iInitialize()
 	_cells.reserve(iGetNumberOfCells());
 	for (int i = 0; i < iGetNumberOfCells(); i++)
 	{
-		CELL c {i, false};
+		CELL c {i, false, 0.};
 		_cells.push_back(c);
 	}
 }
@@ -145,7 +145,7 @@ void Grid::iUpdatePheromon(const int& elapsed)
     {
         float v (it->_tau * (1 - coef));
         if (v < dynamics::PMIN)
-			_it->_tau = 0.;
+			it->_tau = 0.;
 		else
 			it->_tau = v;
     }
@@ -157,7 +157,7 @@ bool Grid::iAddPheromon(const CELL& cell, const float value)
 	if (false == cell._mask)
 	{
 		const float nvalue (value + cell._tau);
-        _cells[cell._id] = nvalue > dynamics::PMAX ? dynamics::PMAX : nvalue;
+        _cells[cell._id]._tau = nvalue > dynamics::PMAX ? dynamics::PMAX : nvalue;
 		result = true;
 	}
 	return result;

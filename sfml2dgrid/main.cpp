@@ -56,7 +56,7 @@ int main()
     oviewer.iActivate();
 
 	// pheromons 
-	PheromonViewer pviewer;
+	viewers::PheromonViewer pviewer;
     pviewer.iActivate();
 
 	// aggregator

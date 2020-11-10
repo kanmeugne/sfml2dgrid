@@ -17,9 +17,9 @@ public:
 		_app = app;
 	}
 	virtual ~ODrawer() {};
-	virtual void operator()(const IGrid::CELL cell)
+	virtual void operator()(const env::CELL& cell)
 	{
-        if (_app->getGrid()->iIsObstacle(cell))
+        if (true == cell._mask)
 
         {
             // get cell position
@@ -44,7 +44,7 @@ public:
 // cell functor for grid obstacle drawing
 ODrawer od;
 
-void ObstacleViewer::drawObstacles(IGrid::ICellFunctor& cf)
+void ObstacleViewer::drawObstacles(env::ICellFunctor& cf)
 {
 	_app->getGrid()->iApplyOnCells(cf);
 }
