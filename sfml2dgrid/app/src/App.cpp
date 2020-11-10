@@ -15,12 +15,12 @@ void App::setWindow(sf::RenderWindow *w)
 	_window = w;
 }
 
-void App::setGrid(IGrid *g)
+void App::setGrid(env::IGrid *g)
 {
 	_grid = g;
 }
 
-IGrid* App::getGrid()
+env::IGrid* App::getGrid()
 {
 	return _grid;
 }
@@ -35,7 +35,7 @@ App::~App()
 	_window = nullptr;
 }
 
-void App::setViewer(AbstractViewer *v)
+void App::setViewer(viewers::AbstractViewer *v)
 {
 	_viewer = v;
 	_viewer->iSetApp(this);
@@ -115,24 +115,24 @@ void App::evaporate()
 
 bool App::addObstacle(int posx, int posy)
 {
-	IGrid::CELL cell;
+	env::CELL cell;
 	int resx = getGrid()->iGetResolutionX();
 	int resy = getGrid()->iGetResolutionY();
-	bool thereisacell = getGrid()->iGetCellNumber(posy/resy, posx/resx, cell);
+	bool thereisacell = getGrid()->iGetCellNumberFromPosition(posy/resy, posx/resx, cell);
 	if (thereisacell)
-		printf("(CellNo: %d)", cell);
+		printf("(CellNo: %d)", cell._id);
 	
 	return thereisacell && (getGrid()->iAddObstacle(cell));
 }
 
 bool App::removeObstacle (int posx, int posy)
 {
-	IGrid::CELL cell;
+	env::CELL cell;
 	int resx = getGrid()->iGetResolutionX();
 	int resy = getGrid()->iGetResolutionY();
 	bool thereisacell = getGrid()->iGetCellNumber(posy/resy, posx/resx, cell);
 	if (thereisacell)
-		printf("(CellNo: %d)", cell);
+		printf("(CellNo: %d)", cell._id);
 	return thereisacell && (getGrid()->iRemoveObstacle(cell));
 }
 
@@ -141,7 +141,7 @@ bool App::addPheromon(int posx, int posy)
 	IGrid::CELL cell;
 	int resx = getGrid()->iGetResolutionX();
 	int resy = getGrid()->iGetResolutionY();
-	bool thereisacell = getGrid()->iGetCellNumber(posy/resy, posx/resx, cell);
+	bool thereisacell = getGrid()->iGetCellNumberFromPosition(posy/resy, posx/resx, cell);
 	if (thereisacell)
 		printf("(CellNo: %d)", cell);
 	return thereisacell && (getGrid()->iAddPheromon(cell, dynamics::DELTAMAX));

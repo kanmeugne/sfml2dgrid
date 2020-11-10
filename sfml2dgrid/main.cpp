@@ -37,7 +37,7 @@ int main()
 	app.setWindow(&window);
 
 	//-- grid 2D
-    Grid g;
+    env::Grid g;
 	g.setSizeX(App::DEFAULT_WIDTH);
 	g.setSizeY(App::DEFAULT_HEIGHT);
 	g.setResolutionX(App::DEFAULT_RESX);
@@ -46,21 +46,21 @@ int main()
     app.setGrid(&g);
 
 	//-- viewer
-
-	// grid lines
-	GridViewer gviewer;
+	viewers::GridViewer gviewer;
+	app.setViewer(&gviewer);
+	gviewer.initialize();
     gviewer.iActivate();
 
 	// grid obstacles
-	ObstacleViewer oviewer;
+	viewers::ObstacleViewer oviewer;
     oviewer.iActivate();
 
 	// pheromons 
-	PheromonViewer pviewer;
+	viewers::PheromonViewer pviewer;
     pviewer.iActivate();
 
 	// aggregator
-	ViewerMgr mgr;
+	viewers::ViewerMgr mgr;
 	mgr.iAddViewer(&oviewer);
 	mgr.iAddViewer(&pviewer);
 	mgr.iAddViewer(&gviewer);

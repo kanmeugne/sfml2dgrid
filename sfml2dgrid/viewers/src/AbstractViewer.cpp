@@ -1,5 +1,6 @@
 #include "AbstractViewer.h"
 #include <algorithm>
+using namespace viewers;
 
 void AbstractViewer::iSetApp(App *app)
 {
