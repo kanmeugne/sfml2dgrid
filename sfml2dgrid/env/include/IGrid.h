@@ -17,7 +17,7 @@ namespace env
 	{
 	public:
 		virtual void operator()(
-			const CELL& // cell_id
+			const CELL & // cell_id
 			) = 0;
 	};
 	// IGrid
@@ -36,7 +36,7 @@ namespace env
 		// gets the height of a cell (in terms of pixels)
 		virtual int iGetResolutionY() const = 0;
 		// applies functor on Cells
-		virtual void iApplyOnCells(ICellFunctor&) const = 0;
+		virtual void iApplyOnCells(ICellFunctor &) const = 0;
 		//-- Test
 		// relative position of a cell according to its id
 		virtual bool iGetCellPosition(
@@ -71,11 +71,11 @@ namespace env
 		// initializes the vector of cells, obstacle mask, etc.
 		virtual void iInitialize() = 0;
 		// add obstacle to the grid
-		virtual bool iAddObstacle(const CELL& ) = 0;
+		virtual bool iAddObstacle(const CELL &) = 0;
 		// remove obstacle from the grid
-		virtual bool iRemoveObstacle(const CELL&) = 0;
+		virtual bool iRemoveObstacle(const CELL &) = 0;
 		// return the obstacle status : true if obstacle, false otherwise
-		virtual bool iIsObstacle(const CELL&) const = 0;
+		virtual bool iIsObstacle(const CELL &) const = 0;
 	};
 } // namespace env
 #endif // !IGRID_H
