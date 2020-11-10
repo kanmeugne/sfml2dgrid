@@ -91,23 +91,23 @@ void App::run()
 
 bool App::addObstacle(int posx, int posy)
 {
-	IGrid::CELL cell;
+	env::CELL cell;
 	int resx = getGrid()->iGetResolutionX();
 	int resy = getGrid()->iGetResolutionY();
 	bool thereisacell = getGrid()->iGetCellNumber(posy/resy, posx/resx, cell);
 	if (thereisacell)
-		printf("(CellNo: %d)", cell);
+		printf("(CellNo: %d)", cell._id);
 	
 	return thereisacell && (getGrid()->iAddObstacle(cell));
 }
 
 bool App::removeObstacle (int posx, int posy)
 {
-	IGrid::CELL cell;
+	env::CELL cell;
 	int resx = getGrid()->iGetResolutionX();
 	int resy = getGrid()->iGetResolutionY();
 	bool thereisacell = getGrid()->iGetCellNumber(posy/resy, posx/resx, cell);
 	if (thereisacell)
-		printf("(CellNo: %d)", cell);
+		printf("(CellNo: %d)", cell._id);
 	return thereisacell && (getGrid()->iRemoveObstacle(cell));
 }

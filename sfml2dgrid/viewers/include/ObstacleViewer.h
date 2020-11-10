@@ -5,16 +5,19 @@
 #include "IGrid.h"
 #include <vector>
 
-class ObstacleViewer : public AbstractViewer
+namespace viewers
 {
-public:
-    ObstacleViewer() = default;
-    virtual ~ObstacleViewer() = default;
+    class ObstacleViewer : public AbstractViewer
+    {
+    public:
+        ObstacleViewer() = default;
+        virtual ~ObstacleViewer() = default;
 
-protected:
-    virtual void iDraw();
+    protected:
+        virtual void iDraw();
 
-private:
-    void drawObstacles(IGrid::ICellFunctor &);
-};
+    private:
+        void drawObstacles(env::ICellFunctor &);
+    };
+} // namespace viewers
 #endif // !OBSTACLEVIEWER_H

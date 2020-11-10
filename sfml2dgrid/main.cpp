@@ -51,11 +51,11 @@ int main()
     gviewer.iActivate();
 
 	// grid obstacles
-	ObstacleViewer oviewer;
+	viewers::ObstacleViewer oviewer;
     oviewer.iActivate();
 
 	// aggregator
-	ViewerMgr mgr;
+	viewers::ViewerMgr mgr;
 	mgr.iAddViewer(&oviewer);
 	mgr.iAddViewer(&gviewer);
 	app.setViewer(&mgr);

@@ -53,10 +53,8 @@ public:
 	void run();
 	// show content (display routines)
 	void display();
-
 	// add obstacle control
 	bool addObstacle(int, int);
-
 	// remove obstacle control
 	bool removeObstacle (int, int);
 
