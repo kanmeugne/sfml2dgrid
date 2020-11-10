@@ -15,12 +15,12 @@ void App::setWindow(sf::RenderWindow *w)
 	_window = w;
 }
 
-void App::setGrid(IGrid *g)
+void App::setGrid(env::IGrid *g)
 {
 	_grid = g;
 }
 
-IGrid* App::getGrid()
+env::IGrid* App::getGrid()
 {
 	return _grid;
 }
@@ -35,7 +35,7 @@ App::~App()
 	_window = nullptr;
 }
 
-void App::setViewer(AbstractViewer *v)
+void App::setViewer(viewers::AbstractViewer *v)
 {
 	_viewer = v;
 	_viewer->iSetApp(this);

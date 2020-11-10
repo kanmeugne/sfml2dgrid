@@ -36,7 +36,7 @@ int main()
 	app.setWindow(&window);
 
 	//-- grid 2D
-    Grid g;
+    env::Grid g;
 	g.setSizeX(App::DEFAULT_WIDTH);
 	g.setSizeY(App::DEFAULT_HEIGHT);
 	g.setResolutionX(App::DEFAULT_RESX);
@@ -45,9 +45,9 @@ int main()
     app.setGrid(&g);
 
 	//-- viewer
-
-	// grid lines
-	GridViewer gviewer;
+	viewers::GridViewer gviewer;
+	app.setViewer(&gviewer);
+	gviewer.initialize();
     gviewer.iActivate();
 
 	// grid obstacles
