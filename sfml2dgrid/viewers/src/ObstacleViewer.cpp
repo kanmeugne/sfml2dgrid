@@ -1,6 +1,8 @@
 #include "ObstacleViewer.h"
 #include "App.h"
+#include "IGrid.h"
 #include <SFML/Graphics.hpp>
+
 using namespace viewers;
 
 class ODrawer : public env::ICellFunctor

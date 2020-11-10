@@ -2,8 +2,11 @@
 #define OBSTACLEVIEWER_H
 
 #include "AbstractViewer.h"
-#include "IGrid.h"
-#include <vector>
+
+namespace env
+{
+    class ICellFunctor;
+};
 
 namespace viewers
 {
