@@ -20,7 +20,7 @@ namespace viewers
         virtual void iDraw();
 
     private:
-        void drawPheromon(IGrid::ICellFunctor &);
+        void drawPheromon(env::ICellFunctor &);
     };
 } // namespace viewers
 #endif // !PHEROMONVIEWER_H

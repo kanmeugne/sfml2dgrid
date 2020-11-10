@@ -162,4 +162,3 @@ bool Grid::iAddPheromon(const CELL& cell, const float value)
 	}
 	return result;
 }
-

@@ -1,12 +1,9 @@
 #include "PheromonViewer.h"
 #include "App.h"
-#include "IGrid.h"
 #include "dynamics.h"
 #include <SFML/Graphics.hpp>
 
-using namespace viewers;
-
-class PDrawer : public env::ICellFunctor
+class PDrawer : public IGrid::ICellFunctor
 {
 private:
 	App* _app;
@@ -17,9 +14,14 @@ public:
 		_app = app;
 	}
 	virtual ~PDrawer() {};
-	virtual void operator()(const env::CELL& cell)
+	virtual void operator()(const IGrid::CELL cell)
 	{
-        if ((false == cell._mask) && (cell._tau > 0.)) 
+        float pvalue;
+        if ( 
+            (false ==_app->getGrid()->iIsObstacle(cell)) &&
+            (_app->getGrid()->iGetPheromon(cell, pvalue)) &&
+            (pvalue > 0.)
+        ) 
         {
             // get cell position
             int x, y;
@@ -35,7 +37,7 @@ public:
             square.setPoint(3, sf::Vector2f(x - resx / 2., y + resy / 2.));
 
             // color according to pheromon value
-            int level (cell._tau * 255 / dynamics::PMAX);
+            int level (pvalue * 255 / dynamics::PMAX);
             square.setFillColor(sf::Color(255, 255-level, 255-level));
 
             // draw the cell
@@ -47,7 +49,7 @@ public:
 // cell functor for pheromon drawing
 PDrawer phdr;
 
-void PheromonViewer::drawPheromon(env::ICellFunctor& cf)
+void PheromonViewer::drawPheromon(IGrid::ICellFunctor& cf)
 {
 	_app->getGrid()->iApplyOnCells(cf);
 }
