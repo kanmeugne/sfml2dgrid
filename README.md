@@ -1,22 +1,4 @@
----
-title:  "Pheromon evaporation on a 2D Grid"
-teaser: "In a previous article, I presented a C++ SFML application that models a 2D Grid with the possibility to add and remove obstacles. In this post, I am going to add a very nice feature : <i>pheromon evaporation</i>. I will discuss how this kind of feature could profit operational research and online optimization modelers."
-tags:
-    - sfml
-    - cmake
-    - c++
-    - modeling
-    - pheromon
-    - evaporation
-    - simulation
-categories:
-    - modeling & simulation
-math: true
-comments: true
----
-
-
-You should now be familiar with our [2D Grid app][6].
+You should now be familiar with our [2D Grid app][6] (follow the link first if you don't understand the reference)
 
 In a [previous post][1], I updated its original object-oriented architecture in order to implement an affordable obstacle feature. Here, I am going to upgrade the architecture again in order to implement a pheromon evaporation feature.
 
