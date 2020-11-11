@@ -46,8 +46,6 @@ int main()
 
 	//-- viewer
 	viewers::GridViewer gviewer;
-	app.setViewer(&gviewer);
-	gviewer.initialize();
     gviewer.iActivate();
 
 	// grid obstacles
