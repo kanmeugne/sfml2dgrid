@@ -51,9 +51,9 @@ int main()
 	viewers::ObstacleViewer oviewer;
 	oviewer.iActivate();
 
-	// pheromons 
+	// pheromons
 	viewers::PheromonViewer pviewer;
-    pviewer.iActivate();
+	pviewer.iActivate();
 
 	// aggregator
 	viewers::ViewerMgr mgr;
