@@ -118,7 +118,7 @@ bool App::addObstacle(int posx, int posy)
 	env::CELL cell;
 	int resx = getGrid()->iGetResolutionX();
 	int resy = getGrid()->iGetResolutionY();
-	bool thereisacell = getGrid()->iGetCellNumberFromPosition(posy/resy, posx/resx, cell);
+	bool thereisacell = getGrid()->iGetCellNumber(posy/resy, posx/resx, cell);
 	if (thereisacell)
 		printf("(CellNo: %d)", cell._id);
 	
@@ -138,11 +138,11 @@ bool App::removeObstacle (int posx, int posy)
 
 bool App::addPheromon(int posx, int posy)
 {
-	IGrid::CELL cell;
+	env::CELL cell;
 	int resx = getGrid()->iGetResolutionX();
 	int resy = getGrid()->iGetResolutionY();
-	bool thereisacell = getGrid()->iGetCellNumberFromPosition(posy/resy, posx/resx, cell);
+	bool thereisacell = getGrid()->iGetCellNumber(posy/resy, posx/resx, cell);
 	if (thereisacell)
-		printf("(CellNo: %d)", cell);
+		printf("(CellNo: %d)", cell._id);
 	return thereisacell && (getGrid()->iAddPheromon(cell, dynamics::DELTAMAX));
 }

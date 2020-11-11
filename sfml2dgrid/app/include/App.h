@@ -52,15 +52,12 @@ public:
 	void run();
 	// show content (display routines)
 	void display();
-
 	// evaporation cycle
 	void evaporate();
-
 	// add obstacle control
 	bool addObstacle(int, int);
 	// remove obstacle control
 	bool removeObstacle(int, int);
-
 	// add Pheromon
 	bool addPheromon(int, int);
 
