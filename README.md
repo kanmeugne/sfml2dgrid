@@ -1,17 +1,35 @@
-I started studying simulation of moving agents ten years ago and I have come to realize that regular 2D Grids are extraordinary abstractions for the navigable space. In fact, regular 2D grids are very easy to encode and they offer an elegant framework for path planning and collision avoidance algorithms deployment.
+---
+title:  "Pheromon evaporation on a 2D Grid"
+teaser: "In a previous article, I presented a C++ SFML application that models a 2D Grid with the possibility to add and remove obstacles. In this post, I am going to add a very nice feature : <i>pheromon evaporation</i>. I will discuss how this kind of feature could profit operational research and online optimization modelers."
+tags:
+    - sfml
+    - cmake
+    - c++
+    - modeling
+    - pheromon
+    - evaporation
+    - simulation
+categories:
+    - modeling & simulation
+math: true
+comments: true
+---
 
-In this project, I am sharing an *object oriented architecture* --- with its C++ implementation ---  that I am actually using in my personal projects when I need a 2D Grid. I hope that it could be an affordable starting point for anyone who is interested in the subject.
 
-## Architecture
+You should now be familiar with our [2D Grid app][6].
 
-To be very concrete, I am going to assume that I am building a simulation app --- of moving agents --- that uses a 2D grid as the navigable space model. The root *object oriented architecture* that I am using to tackle the implementation is outlined in **Fig. 1.** Basically, there is an application object called *App* and three other packages: 
-- *env* : for the navigable space representation and manipulation objects
-- *viewers* : for visualisation purposes
-- *geometry* : for geometrical abstraction
+In a [previous post][1], I updated its original object-oriented architecture in order to implement an affordable obstacle feature. Here, I am going to upgrade the architecture again in order to implement a pheromon evaporation feature.
 
-I am giving more details about *App*, *env*, *viewers* and *geometry* below.
+You can see pheromon like a chemical substance that is dropped somewhere --- as a mark of an organic activity --- and then evaporates overtime. Pheromon paradigm is a very productive way to implement a *stigmergic* behavior --- which is a type of behavior based on indirect communication through a common and shared space. Stigmergy explains the emergence of collective behavior among several social species with limited intellectual abilities. The concept has been first introduced by the french biologist [Pierre-Paul Grassé][2] and systematically studied by [Deneubourg][3] for different ants species.
+
+The proposed improvements of the previous [object-oriented architecture][1] will focus on mimicking and illustrating an ant-like pheromon evaporation. Simply put, I am going to do the following : 
+
+1. add another viewer for pheromon --- *PheromonViewer* --- and more controls in the *App* object -- *App::addPheromon*
+2. upgrade *IGrid*, and consequently *Grid*,  to declare and implement pheromon related methods
+3. define a new method --- *App::evaporate* --- responsible of the evaporation process.
 
 ![Fig. 1.](http://www.plantuml.com/plantuml/svg/JOzHJe0m38RVUugUO8YFP2wG63t7s0eiRenq6qQ9TvSfKVhsV_tx9UrJrfnByB2GjiGTokG-gMiV5CefhXbDz96VHbz8lRXPO2jaKnSA1pQBosHoOS8uOIoCZy_uoixYi6qecwfI0CRhb7xGyGMmQVEcPq9QTuG3y1ouuTtHEt62umvdYe4oV_pIQX92_LMlN8rmiPh_hs1nbZ1G66kzfzMU7ty3)
+
 
 ```terminal
 sfml2dgrid
@@ -24,38 +42,43 @@ sfml2dgrid
     ├── CMakeLists.txt
     ├── main.cpp
     ├── app
-    │   ├── include
-    │   │   └── App.h
-    │   └── src
-    │       └── App.cpp
+    │   ├── include
+    │   │   ├── App.h
+    │   │   └── dynamics.h
+    │   └── src
+    │       └── App.cpp
     ├── env
-    │   ├── include
-    │   │   ├── Grid.h
-    │   │   └── IGrid.h
-    │   └── src
-    │       └── Grid.cpp
+    │   ├── include
+    │   │   ├── Grid.h
+    │   │   └── IGrid.h
+    │   └── src
+    │       └── Grid.cpp
     ├── geometry
-    │   └── include
-    │       └── geometry.h
+    │   ├── include
+    │   │   └── geometry.h
+    │   └── src
     └── viewers
         ├── include
-        │   ├── AbstractViewer.h
-        │   └── GridViewer.h
+        │   ├── AbstractViewer.h
+        │   ├── GridViewer.h
+        │   ├── ObstacleViewer.h
+        │   └── PheromonViewer.h
         └── src
             ├── AbstractViewer.cpp
-            └── GridViewer.cpp
+            ├── GridViewer.cpp
+            ├── ObstacleViewer.cpp
+            └── PheromonViewer.cpp
+
 ```
-> **Note**: the file tree of the project with the source (.cpp) and header (.h) files that I am going to discuss about in the rest of the post.
+> **Note**: the file tree of the project with the source (.cpp) and header (.h) files. I am just going to discuss about the upgrade that I made from the previous version.
 
-### App : the Application Object
+## Pheromon modeling and evaporation
 
-The *App* object is the definition of our application --- see **Fig.2.** It holds a viewer (*viewers::AbstractViewer*) --- that contains display instructions --- and a reference to a 2D Grid (*env::IGrid*) --- that will be used to manipulate the 2D grid. Note that the *App* object has an *SFML window* as a private attribute --- this is where the rendering will occurs.
+The *App* object is augmented with *App::addPheromon* and *App::evaporate* methods both responsible of *adding* a little amount of pheromon in a selected cell, and *evaporating* pheromons over time --- see Fig. 2. 
 
-![Fig. 2.](http://www.plantuml.com/plantuml/svg/NL5DIyGm4BtdLxpZBhAxkiSImow8ujM37YLDfZQI9YL9MrJyxwQf1TtJCE_nFeOvnIH36ZhBMfAQGWKUpITLDzU2DzubA6zzkAtjGEBUlErntFF3J0YS-nw-VYULO29aIbArf94y94P34mLipdLCGQhqNFOjfDDGMHsypH8Sx_0GZCRcSHvRVfYp1MFAoXXBm1S3W1rYKrLFv7B35-Eqd_0wbLdeAum-kuJ1RRP_0MrYR-L71hyPaxzLi9Z_RmREbyfHv7ZZ4eL6AaBfbKbouqoKatSxiU3hUk75M6lqAksegxDhWIupLuwTyc7v1Jy0)
+![Fig. 2.](http://www.plantuml.com/plantuml/svg/bPJVRzCm4CVV_LVS4-fWwmPlL5MqgM9JfObDGuZnwCRNzeJZY-nBqORutx7TBBYq555LINptkH-sxklB8DfBrrWLQcqHBiRlbP1OdC0qq3DEtbvKrxGQmxinNBKjQ6TWVkF903Mjvmqsw2HCpnDRgThg43BtGq7ylO4DHzHtRdHI6Wo5rkgdmRXWjg2DkLi4qRN54JavXVZO0JmsiU0n9YUvNwFdXbq15ALnerlsMd2KFJ-LOq7mj5gBcb8LUvzC1cPwJXLy9sjX4HaCBRj02ul0Iv0r3ic87RIUQmnXI59qifEc2sX0E7KARGz0_6i8QB6MwAtHMeNEGEgjFzJPXzjRc4xHRQfgE5ro0cJA_JSwVElNIyjQG7GNDnb1z4jT8yndQErrvsfXlvTlGruwRRSdnIrw7QbHpIv8Rk2aJDNFGPbZQ8FcZeIqfMSSdPJDtg1yYiR7WzQlUzO736oxTBwFHtpxSH-xPe7-Rfas6tR6BBkJ-Pu3fU1YUw_okFJFWq4pPc_8QS7mNt7RVeQ9FCrX1r1seicHMwMWlaBcXy-3eVFmXMHDxaXK_ZmKUrN8xg_Gmo2zuzmy_9kvAYHQGgLAwNDhjE0XRb-pUGwpnWmkoM60Q2pB9D-fwZMd7UY6EoT9n8C0ALfXHHjqkOfIsfcSPhUHN2KbQblxLCf__ATUN-v8kxqXUx6exMiyhdAPObdgKfMBtt1cNv-TdVNhTCzoMkKiQaq6-p9BGcj2jcGK6fGrlrWoqc2QoDvIrjlrf1fzjajqfcliBm00)
 
-*App* also defines two important methods :
-- *App::run* : responsible of the simulation logic
-- *App::display* : responsible of the display (what we see on the screen).
+*App::evaporate* will take a *time interval* as parameter in order to schedule the *evaporation process* --- I use [SFML *clocks*][4] to implement this.
 
 **App.h**
 
@@ -63,7 +86,6 @@ The *App* object is the definition of our application --- see **Fig.2.** It hold
 
 #ifndef APP_H
 #define APP_H
-
 namespace sf
 {
 	class RenderWindow;
@@ -115,149 +137,22 @@ public:
 	void run();
 	// show content (display routines)
 	void display();
+	// evaporation cycle
+	void evaporate();
+	// add obstacle control
+	bool addObstacle(int, int);
+	// remove obstacle control
+	bool removeObstacle(int, int);
+	// add Pheromon
+	bool addPheromon(int, int);
 
 	App() = default;
 	virtual ~App();
 };
 #endif // !APP_H
 ```
-> **Note**: In the *App.h* file, I have defined static attributes --- *DEFAULT_WIDTH*, *DEFAULT_HEIGHT*, *DEFAULT_RESX*, *DEFAULT_RESY* --- to set the default dimensions of a grid in the application.
 
-### *AbstractViewer*, GridViewer and the *geometry* Package
-
-*AbstractViewer* is meant to be derivated according to what we want to show on the application window --- for instance, *GridViewer* is a specific implementation of *AbstractViewer* that uses the *geometry* package to draw the grid lines.
-
-
-#### AbstractViewer : The Generic Definition of a Viewer
-
-*AbstractViewer* is always attached to an *App* object --- see **Fig.3** --- and defines a protected abstract method called *AbstractViewer::iDraw* --- implemented in its inherited classes. *AbstractViewer::iDraw* is called by the public method *AbstractViewer::iDisplay* when necessary --- that will be in the *App::display* function.
-
-![Fig.3.](http://www.plantuml.com/plantuml/svg/RL5DYzim4BthLpnOACcMU5jwIxrc0sLBeBU5NeiYZUEXicGaETlDalzUEPPfR7hGvRsPzw5v2b7wsBT6D2GrUL46FjFsywSAPUriX7B6-SU3wQbwvcE1BqNvC10LldlMFvbUoOC39497YcjME8tWYWigmBOXpp6Wzgx5xX2YbogEU-l4GZNI7mckXlRobUqHiI4OjXImQfpdStAJ1j9gdCX7LjAiq_Xrx9Wo5DX7z872Y91hAVetT5BzbacuV1WQLOBIVkweZ0m1kwx3km20ZpWvrl2zNQrl0SsXC_8jWHSXStBavLaHbELOEbJLN9DtAl99HfehypUI_oVsuRgnX5yefhohzEuNGbF6hrVu3kzJqiiqaRurgztXu9p1hwituH6rD85Ikx5KlkYo4Fs9PFMoS-wvoL-LJ7uCDrjD1zXkzozqRCd6vzwgwFo7UN3BaQNXCqtPvd4lWcqaNqj5M0YbS9D9LUNeUM9EYULYKLJJf1ZExpQRHIjnymTfUc4ze-ytctzgec5D63HRQW_ammWirkTavkRWZK7DP7GGuecixblp5m00)
-
-**AbstractViewer.h**
-```c++
-#ifndef ABSTRACTVIEWER_H
-#define ABSTRACTVIEWER_H
-
-class App;
-
-namespace viewers
-{
-	// AbstractViewer
-	class AbstractViewer
-	{
-	public:
-		// activate the viewer. If activated, it provides the desired view
-		virtual void iActivate();
-		// deactivate the viewer. Do not display anaything if deactivated
-		virtual void iDeactivate();
-		// return True if the viewer is active
-		virtual bool iIsActive() const;
-		// display function
-		virtual void iDisplay();
-		// attach the application object
-		virtual void iSetApp(App *);
-
-		virtual ~AbstractViewer() = default;
-		AbstractViewer() = default;
-
-	protected:
-		// specific draw method (to be concretized in child classes)
-		virtual void iDraw() = 0;
-		// if active the viewer is automatically activated
-		bool _active = false;
-		// reference to the attached app
-		App *_app;
-	};
-} // namespace viewers
-
-#endif // !ABSTRACTVIEWER_H
-```
-> **Note**: *AbstractViewer* is always attached to an *App* object and defines a protected abstract method called *AbstractViewer::iDraw*.
-
-#### GridViewer : the Grid Lines Viewer
-
-For the exercice, we will define *GridViewer* as our only viewer, reponsible of displaying the lines of the 2D Grid. The private methods defined in *GridViewer* are : 
-- *initialize* : to build the set of segments to be displayed
-- *drawLine* : to call the graphic engine and draw every segment built during the initialization step *initialize*
-- *iDraw* : to call the above methods in the right order.
-
-**GridViewer.h**
-
-```c++
-#ifndef GRIDVIEWER_H
-#define GRIDVIEWER_H
-
-#include "AbstractViewer.h"
-#include "geometry.h"
-#include <vector>
-
-namespace viewers
-{
-	class GridViewer : public AbstractViewer
-	{
-	public:
-		GridViewer() = default;
-		virtual void initialize();
-		virtual ~GridViewer() = default;
-
-	protected:
-		virtual void iDraw();
-
-	private:
-		void drawLines(geometry::ISegmentFunctor &) const;
-		std::vector<geometry::Segment> _lines;
-	};
-} // namespace viewers
-#endif // !GRIDVIEWER_H
-```
-> **Note**: We define *GridViewer* as our only viewer, reponsible of displaying the lines of the 2D Grid
-
-#### The *geometry* Package
-
-Here is the full description of our modest *geometry* package.
-
-It contains the following objects :
-- *Point* : a 2D point definition, actually a pair of integers
-- *Segment* : the definition of a segment --- a pair of *Point*
-- *ISegmentFunctor* : an interface, meant to be realised by functors that applies on *Segment*
-
-**geometry.h**
-
-```c++
-#ifndef GEOMETRY_H
-#define GEOMETRY_H
-
-#include <utility>
-
-namespace geometry
-{
-	// definition of a point (typedef is sufficient)
-	typedef std::pair<int, int> Point;
-	// definition of a segment (typedef is sufficient)
-	typedef std::pair<Point, Point> Segment;
-
-	// Functor definition to apply on segment
-	// We can inherit from this to function
-	// to apply display instruction on segments
-	class ISegmentFunctor {
-	public:
-		// operator function to apply on each segment 
-		// (should concretized according to the need)
-		virtual void operator()(
-			const Segment& // cell_id
-		) = 0;
-	};
-}
-#endif // !GEOMETRY_H
-```
-> **Note**: Our very modest geometry package contains *geometry::Point*, *geometry::Segment* and *geometry::ISegmentFunctor*.
-
-### The 2D Grid
-
-The most important features of our 2D grid are defined in the *IGrid* interface  --- see **Fig.4**.  *IGrid* is realized by the *Grid* object which is composed of grid cells --- note that the *CELL* object is defined in *IGrid.h*.
-
-![Fig. 4.](http://www.plantuml.com/plantuml/svg/ZPBHIyCm4CRV-rVSarJTEXMVHYsJgMCmLFH1VSoQwtgG9gL91phytyqjwt2ie7qeoVTzlzo5oyGwqRYsKb69Gc8pXjJI5uulBp982wCTv4QPvcQfMimUQ9N0TPAEsCXWrf241eNoW0LN8f1ss1GYHp052BYwWvNF341YGHgbzs7EL0BfYCjaKQw4jN1Rrx29m7_di3PyQglZqz-295ihyUd5xnqplLyi84rHhxEiWxa18Eap-qv2mQFWqXW5DDVaYFl7hbeuOORkrOlllUh7aVg2rgZMaT61wFUEkSUsMcBpL4nHAHlShZMsMNusbXYE-Re39a_2lpUzCBduVpgKZxtF8VzZgYTgj1EaIQyOYdEZhGlv_JAWX-JSlf4hIVy9TGCzc1DLjS8AjREx0MvyBgoI9DkIqNPtDXpkjlo8ZDy582f98h1M8L_J1Y4SKH0g6PJmZYfqfUaKZkof2MhPLke7)
+A special method to apply evaporation is also defined in *IGrid* --- *IGrid::iUpdatePheromon*.
 
 **IGrid.h**
 
@@ -267,128 +162,158 @@ The most important features of our 2D grid are defined in the *IGrid* interface 
 
 namespace env
 {
-	struct CELL
-	{
-		int _id; // id of the cell
-		CELL() = default;
-		CELL(const CELL &) = default;
-	};
-
-	class IGrid
-	{
-	public:
-		virtual ~IGrid() = default;
-		// returns the width
-		virtual int iGetSizeX() const = 0;
-		// return the height
-		virtual int iGetSizeY() const = 0;
-		// return the number of cells in the grid
-		virtual int iGetNumberOfCells() const = 0;
-		// get the width of a cell (in terms of pixels)
-		virtual int iGetResolutionX() const = 0;
-		// get the height of a cell (in terms of pixels)
-		virtual int iGetResolutionY() const = 0;
-		//-- Test
-		// relative position of a cell according to its id
-		virtual bool iGetCellPosition(
-			const CELL &, // cell
-			int &,        // posx
-			int &,        // posy
-		) const = 0;
-		// coordinates of a cell accoring to its id
-		virtual bool iGetCellCoordinates(
-			const CELL &, // cell
-			int &,        // row_number
-			int &         // column_number
-		) const = 0;
-		// cell rank of the the cell according
-		// to its relative position in the grid
-		virtual bool iGetCellNumber(
-			int, // row_number
-			int, // column_number
-			CELL &) const = 0;
-		// the containing cell given the coordinates in the 2D space
-		virtual bool iGetContainingCell(
-			int,   // posx
-			int,   // posy
-			CELL & // cell
-		) const = 0;
-		// check if a given point is within a given cell
-		virtual bool iIsWithinCell(
-			int,         // posx
-			int,         // posy
-			const CELL & // cell
-		) const = 0;
-		// initialize the vector of cells, obstacle mask, etc.
-		virtual void iInitialize() = 0;
-	};
+    struct CELL
+    {
+        int _id; // id of the cell
+        bool _mask;
+        float _tau; // amount of pheromon
+        CELL() = default;
+        CELL(const CELL &) = default;
+    };
+    // Functor definition to apply on cell
+    // We can inherit from this to function
+    // to apply on cells
+    class ICellFunctor
+    {
+    public:
+        virtual void operator()(
+            const CELL & // cell_id
+            ) = 0;
+    };
+    // IGrid
+    class IGrid
+    {
+    public:
+        virtual ~IGrid() = default;
+        // returns the width
+        virtual int iGetSizeX() const = 0;
+        // returns the height
+        virtual int iGetSizeY() const = 0;
+        // returns the number of cells in the grid
+        virtual int iGetNumberOfCells() const = 0;
+        // gets the width of a cell (in terms of pixels)
+        virtual int iGetResolutionX() const = 0;
+        // gets the height of a cell (in terms of pixels)
+        virtual int iGetResolutionY() const = 0;
+        // applies functor on Cells
+        virtual void iApplyOnCells(ICellFunctor &) const = 0;
+        //-- Test
+        // relative position of a cell according to its id
+        virtual bool iGetCellPosition(
+            const CELL &, // cell
+            int &,        // posx
+            int &         // posy
+        ) const = 0;
+        // coordinates of a cell accoring to its id
+        virtual bool iGetCellCoordinates(
+            const CELL &, // cell
+            int &,        // row_number
+            int &         // column_number
+        ) const = 0;
+        // cell rank of the the cell according
+        // to its relative position in the grid
+        virtual bool iGetCellNumber(
+            int, // row_number
+            int, // column_number
+            CELL &) const = 0;
+        // the containing cell given the coordinates in the 2D space
+        virtual bool iGetContainingCell(
+            int,   // posx
+            int,   // posy
+            CELL & // cell
+        ) const = 0;
+        // checks if a given point is within a given cell
+        virtual bool iIsWithinCell(
+            int,         // posx
+            int,         // posy
+            const CELL & // cell
+        ) const = 0;
+        // initializes the vector of cells, obstacle mask, etc.
+        virtual void iInitialize() = 0;
+        // add obstacle to the grid
+        virtual bool iAddObstacle(const CELL &) = 0;
+        // remove obstacle from the grid
+        virtual bool iRemoveObstacle(const CELL &) = 0;
+        // return the obstacle status : true if obstacle, false otherwise
+        virtual bool iIsObstacle(const CELL &) const = 0;
+        // pheromons
+        virtual bool iAddPheromon(
+            const CELL &,// cell no
+            const float  // pheromon deposit
+        ) = 0;
+        virtual void iUpdatePheromon(const int&) = 0;
+    };
 } // namespace env
 #endif // !IGRID_H
 ```
-> **Note**: The features of the 2D grid are defined in *IGrid.h*. *IGrid.h* also contains the definition of the *CELL* object.
 
-**Grid.h**
+Basically, *IGrid::iUpdatePheromon* will update the amount of pheromons for each cell --- *CELL::tau* --- by running the following formula:
 
+$$ \tau_{ij}^{t} = \tau_{ij}^{t-1} \cdot (1 - \rho) + \Delta^{t}\tau_{ij} $$
+
+Where :
+- $$\tau_{ij}^{t}$$ is the *amount of pheromons in $$cell_{ij}$$ in the current timestep*
+- $$\tau_{ij}^{t-1}$$ is the *amount of pheromons in $$cell_{ij}$$ in the previous timestep*
+- $$\Delta^{t}\tau_{ij}$$ is the *amount of pheromon injected in the current timestep*
+- $$\rho \in [0,1]$$ is the *evaporation coefficient*
+
+As you might have guessed, this method will be called in *App::evaporate* at specific *time intervals*.
+
+## Parameters
+
+For numerical robustness, I will use the following global parameters in the implementation:
+- $$P_{max}$$ : the *pheromon maximum capacity* of a cell
+- $$P_{min}$$ : the *pheromon minimal capacity* of a cell (below this value, the amount of pheromon is set to $$0$$)
+
+The interested reader can refer to the [source code][5] to check/set the value for parameters : $$\rho, P_{min}$$ and $$P_{max}$$
+
+## PheromonViewer
+
+To visualize *pheromons* and especially the *evaporation process*, I added a *PheromonViewer* that will be called in the *App::display* method. *PheromonViewer::iDraw*  applies an *ICellFunctor* on every cell of the grid --- if their corresponding amount of pheromon is greater than zero --- that draws a red mark on the screen according to their current state.
+
+![Fig. 4.](http://www.plantuml.com/plantuml/svg/ZP91Yzim48Nl_XKF2iNU4hU7NffcJSEsMmAxj53ejKoiYIrG92EDaotB_lVAZjnWqqCF0V5cvdjvu_aKXBpqHvErJ8fzjZauAwYTSVvsRtgkxdLJudsvUJiKAlpKV6R_s7Ze0CAHXN0QDKXB0ceyDoGSS7IU1yt2MKuzPROJdBKns3Fwm0hYG4hXB-JWFBgMlJiwY_nxUbrS2rX-4eYBs8aOXedCQCi1-LUlrTHALi7jOxpQ3ALlwJcLprfQrmlgbcoZRJCYFHiIxMneTOSzovdPOjjr8smR2PvgkH0oZbBQMQZ9CDwL7p9jXVs1QiRkZesvxsqjpcEpONkgAZnd0F069-sb9uEJqmgkOq-nAw-ZiU3koyD3aRrabEnG6mfXuHw9AVwLUg7fRItwHC9vCPC_C_sxi0lZn5B-mHA3v_5tim3fq1dwdHSVH_aLdgT_-Z9rU3hdHQhkdJFuDNepRd4W4pYckuIQVzvPA7uIjcgPEsLTGKMFQJgForslPmj_NKmUruFz3_nobIfTKpwrFPAbXltDWB-2tMfLBSzZ4Qqig_b9hE5x6r1bhLQyNCH1ir53PNP7CtroJ-8V)
+
+**PheromonViewer.h**
 ```c++
-#ifndef GRID_H
-#define GRID_H
+#ifndef PHEROMONVIEWER_H
+#define PHEROMONVIEWER_H
 
-#include "IGrid.h"
-#include <vector>
+#include "AbstractViewer.h"
 
 namespace env
 {
-	const int DEFAULT_GRID_SIZEX = 10;
-	const int DEFAULT_GRID_SIZEY = 10;
-	const int DEFAULT_RESOLUTIONX = 1;
-	const int DEFAULT_RESOLUTIONY = 1;
+    class ICellFunctor;
+};
 
-	class Grid : public IGrid
-	{
-	public:
-		virtual ~Grid() = default;
-		Grid() = default;
-		//-- Getters
-		virtual int iGetSizeX() const;
-		virtual int iGetSizeY() const;
-		virtual int iGetNumberOfCells() const;
-		virtual int iGetResolutionX() const;
-		virtual int iGetResolutionY() const;
-		// Test
-		virtual bool iGetCellPosition(const CELL &, int &, int &) const;
-		virtual bool iGetCellCoordinates(const CELL &, int &, int &) const;
-		virtual bool iGetCellNumber(int, int, CELL &) const;
-		virtual bool iGetContainingCell(int, int, CELL &) const;
-		virtual bool iIsWithinCell(int, int, const CELL &) const;
-		virtual void iInitialize();
-		//-- Setters
-		void setSizeX(int);
-		void setSizeY(int);
-		void setResolutionX(int);
-		void setResolutionY(int);
+namespace viewers
+{
+    class PheromonViewer : public AbstractViewer
+    {
+    public:
+        PheromonViewer() = default;
+        virtual ~PheromonViewer() = default;
 
-	private:
-		int _sizex = DEFAULT_GRID_SIZEX;
-		int _sizey = DEFAULT_GRID_SIZEY;
-		int _resolutionx = DEFAULT_RESOLUTIONX;
-		int _resolutiony = DEFAULT_RESOLUTIONY;
-		std::vector<CELL> _cells;
-	};
-} // namespace env
-#endif // !GRID_H
+    protected:
+        virtual void iDraw();
+
+    private:
+        void drawPheromon(env::ICellFunctor &);
+    };
+} // namespace viewers
+#endif // !PHEROMONVIEWER_H
 ```
-> **Note**: The *Grid* object realizes the *IGrid* interface.
-
 
 ## Demo
 
-Our 2D Grid app architecture is now complete! The build strategy is exactly the same as what we have presented in a [previous post][3] --- we refer the reader to that post for more details. The main file for the demo contains the following :
+We are ready to instanciate our brand new *App* object with all the improvements for pheromon manipulation.
 
 **main.cpp**
 
-```c++
+{% highlight c++ %}
 #include "App.h"
 #include "GridViewer.h"
+#include "ObstacleViewer.h"
+#include "PheromonViewer.h"
 #include "Grid.h"
 #include <thread>
 #include <SFML/Graphics.hpp>
@@ -402,6 +327,7 @@ int main()
 #ifdef __linux__
     XInitThreads();
 #endif
+
     // -- sfml windows
     sf::ContextSettings settings;
     settings.antialiasingLevel = 10;
@@ -411,68 +337,88 @@ int main()
             (App::DEFAULT_HEIGHT*App::DEFAULT_RESY)
         ),
         "SFML 2D Grid",
-        sf::Style::Titlebar | sf::Style::Close,
+        sf::Style::Titlebar | sf::Style::Close, 
         settings
     );
     window.clear(sf::Color::White);
     window.setFramerateLimit(120);
     window.setActive(false);
-    
+
     // -- application
     App app;
     app.setWindow(&window);
-    
+
     //-- grid 2D
-    Grid g;
+    env::Grid g;
     g.setSizeX(App::DEFAULT_WIDTH);
     g.setSizeY(App::DEFAULT_HEIGHT);
     g.setResolutionX(App::DEFAULT_RESX);
     g.setResolutionY(App::DEFAULT_RESY);
     g.iInitialize();
     app.setGrid(&g);
-    
+
     //-- viewer
-    GridViewer gviewer;
+    viewers::GridViewer gviewer;
     app.setViewer(&gviewer);
     gviewer.initialize();
     gviewer.iActivate();
-    
+
+    // grid obstacles
+    viewers::ObstacleViewer oviewer;
+    oviewer.iActivate();
+
+    // pheromons 
+    viewers::PheromonViewer pviewer;
+    pviewer.iActivate();
+
+    // aggregator
+    viewers::ViewerMgr mgr;
+    mgr.iAddViewer(&oviewer);
+    mgr.iAddViewer(&pviewer);
+    mgr.iAddViewer(&gviewer);
+    app.setViewer(&mgr);
+    mgr.iActivate();
+
+    // initialize gviewer (only after having attached it to the App object)
+    gviewer.initialize();
+
     //-- launch application
     std::thread rendering_thread(&App::display, &app);
+    std::thread evaporation_thread(&App::evaporate, &app);
     app.run();
     rendering_thread.join();
-    
+    evaporation_thread.join();
+
     return 0;
 }
-```
+{% endhighlight %}
 
-## Configure and Build
+The interested reader can fork the complete source code from [here][5] and run the following in a terminal at the project folder root :
 
-The interested reader can fork the complete source code from [here][2] and run the following in a terminal at the root of the project folder :
-
-### on windows
-
-```shell
+{% highlight shell %}
+  # on windows
   $ cmake  -G "Visual Studio $(Version)" -S . -B ./build 
   $ cmake  --build ./build --config Debug --target app
   $ ./bin/Debug/app
-```
 
-### on linux
-
-```shell
+  # on linux
   $ mkdir build  
   $ cd build
   $ cmake -G "Unix Makefiles" .. -DCMAKE_BUILD_TYPE=Debug
-  $ cmake --build ./ --target app --config Debug
+  $ cmake --build ./ --target app
   $ ../bin/Debug/app
-```
+{% endhighlight %}
 
-![screenshot](/images/sfml-2d-grid.gif)
+The program should display a clickable 2D Grid where the right-click adds an obstacle on the selected cell and the left-click removes it. With the mouse middle you should be able to drop pheromon on the grid. Once pheromons are dropped they automatically and smoothly start to evaporate.
 
-You should see a clickable window with a 2D-Grid displayed on it! Enjoy and feel free to send me your feedbacks!
+![screenshot](/images/2d-grid-obstacles-pheromons.gif)
+
+Enjoy and feel free to send me your feedbacks!
 
 
-[1]: https://www.sfml-dev.org/
-[2]: https://github.com/kanmeugne/sfml2dgrid/releases/tag/sfml-2d-grid
-[3]: /posts/sfml-cmake-windows
+[1]: https://kanmeugne.github.io/posts/2d-grid-obstacles/
+[2]: https://fr.wikipedia.org/wiki/Stigmergie
+[3]: http://homepages.ulb.ac.be/~jldeneub/images/Deneubourgetal1990.pdf
+[4]: https://www.sfml-dev.org/documentation/2.5.1/classsf_1_1Clock.php
+[5]: https://github.com/kanmeugne/sfml2dgrid/releases/tag/sfml-2d-obstacles-pheromons
+[6]: https://kanmeugne.github.io/posts/sfml-2d-grid/
